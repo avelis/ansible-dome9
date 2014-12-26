@@ -1,0 +1,32 @@
+---
+- name: Debian | Set dome9_loaded_os_family
+  set_fact:
+    dome9_loaded_os_family: "{{ ansible_os_family }}"
+
+- name: Debian | Add Dome9 repo key
+  apt_key:
+    url: http://repository.dome9.com/ubuntu/dome9-key.asc
+    state: present
+
+- name: Debian | Add Dome9 repository
+  copy:
+    content: "deb http://repository.dome9.com/ubuntu lucid main"
+    dest: /etc/apt/sources.list.d/dome9.list
+    owner: root
+    group: root
+    mode: 0644
+  register: dome9_repo
+
+- name: Debian | apt-get update
+  apt:
+    update_cache: yes
+  when: dome9_repo.changed
+
+- name: Debian | Install Dome9 Agent
+  apt:
+    pkg: dome9agent
+    update_cache: yes
+    cache_valid_time: 86400
+    state: latest
+  notify:
+    - Restart Dome9 Agent

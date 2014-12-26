@@ -1,0 +1,21 @@
+---
+- name: Check for dome9_pairkey
+  fail:
+    msg: "dome9_pairkey has not been defined"
+  when: dome9_pairkey|default(False) == False
+
+- include: debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include: default.yml
+  when: dome9_loaded_os_family|default(False) == False
+
+- name: Dome9 | Set dome9_servername
+  set_fact:
+    dome9_servername: "{{ ansible_hostname }}"
+
+- name: Pair Dome9 agent
+  shell: dome9d pair -k {{ dome9_pairkey }} -s {{ dome9_servername }} -g {{ dome9_secgroups | join(',') }}
+  notify:
+    - Restart Dome9 Agent
+  when: dome9_loaded_os_family|default(False) != False
