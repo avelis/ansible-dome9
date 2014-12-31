@@ -1,0 +1,5 @@
+---
+
+- include: dome9.yml
+  when: dome9_enabled
+  tags: [dome9]
