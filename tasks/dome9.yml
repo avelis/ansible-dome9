@@ -15,7 +15,8 @@
     dome9_servername: "{{ ansible_hostname }}"
 
 - name: Pair Dome9 agent
-  shell: dome9d pair -k {{ dome9_pairkey }} -s {{ dome9_servername }} -g {{ dome9_secgroups | join(',') }}
+  shell: dome9d pair -k {{ dome9_pairkey }} -s {{ dome9_servername }} -g {{ dome9_secgroups | join(',') }} && touch {{ dome9_root_dir }}/.dome9paired
+    creates: {{ dome9_root_dir }}/.dome9paired
   notify:
     - Restart Dome9 Agent
   when: dome9_loaded_os_family|default(False) != False

@@ -1,2 +1,4 @@
 ---
-dome9_secgroups: [ 'Default' ]
+dome9_enabled: yes                 # The role is enabled
+dome9_secgroups: [ 'Default' ]     # Security groups specific for a Dome9 account
+dome9_root_dir: /root              # The home directory of the root user.
