@@ -16,6 +16,7 @@
 
 - name: Pair Dome9 agent
   shell: dome9d pair -k {{ dome9_pairkey }} -s {{ dome9_servername }} -g {{ dome9_secgroups | join(',') }} && touch {{ dome9_root_dir }}/.dome9paired
+  args:
     creates: "{{ dome9_root_dir }}/.dome9paired"
   notify:
     - Restart Dome9 Agent
